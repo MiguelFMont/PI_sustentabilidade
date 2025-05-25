@@ -3,48 +3,49 @@ import mysql.connector
 os.system('cls' if os.name == 'nt' else 'clear')
 
 alfabeto = ['A','B','C','D','E','F','G','H','I','J','K','L','M',
-                'N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+                'N','O','P','Q','R','S','T','U','V','W','X','Y','Z', ' ']
 
+def criptografia(texto):
 
-
-def criptografia(mensagem):
-
-    chave = [[3, 3], [2, 5]]
-
-    mensagem = mensagem.upper().replace(" ", "")
+    chave = [[1, 2],
+             [3, 5]]
     
-    if len(mensagem) % 2 != 0:
-        mensagem += 'X'
-    
+    texto = texto.upper()
+
+    if len(texto) % 2 != 0:
+        texto += ' '
+
     resultado = ""
-    
-    for i in range(0, len(mensagem), 2):
-        a = alfabeto.index(mensagem[i])
-        b = alfabeto.index(mensagem[i+1])
-        
-        x = (chave[0][0]*a + chave[0][1]*b) % 26
-        y = (chave[1][0]*a + chave[1][1]*b) % 26
-        
+
+    for i in range(0, len(texto), 2):
+        a = alfabeto.index(texto[i])
+        b = alfabeto.index(texto[i + 1])
+
+        x = (chave[0][0]*a + chave[0][1]*b) % 27
+        y = (chave[1][0]*a + chave[1][1]*b) % 27
+
         resultado += alfabeto[x] + alfabeto[y]
 
-    print(f'{mensagem} -> {resultado}')
-
-def descriptografia(mensagemCriptografada):
-    
-    inversa = [[15, 17],
-               [20, 9]]
-    
-    resultado = ""
-    for i in range(0, len(mensagemCriptografada), 2):
-        a = alfabeto.index(mensagemCriptografada[i])
-        b = alfabeto.index(mensagemCriptografada[i+1])
-        
-        x = (inversa[0][0]*a + inversa[0][1]*b) % 26
-        y = (inversa[1][0]*a + inversa[1][1]*b) % 26
-        
-        resultado += alfabeto[x] + alfabeto[y]
-    
     return resultado
+
+def decifragem(cifrado):
+
+    inversa = [[22, 2],
+               [3, 26]]
+    
+    resultado = ""
+
+    for i in range(0, len(cifrado), 2):
+        a = alfabeto.index(cifrado[i])
+        b = alfabeto.index(cifrado[i + 1])
+
+        x = (inversa[0][0]*a + inversa[0][1]*b) % 27
+        y = (inversa[1][0]*a + inversa[1][1]*b) % 27
+
+        resultado += alfabeto[x] + alfabeto[y]
+
+    return resultado
+
 
 # #Conexão BD
 # connect = mysql.connector.connect(
@@ -160,4 +161,5 @@ print(f"Energia: {sustEnergy}")
 print(f"Lixo: {sustWaste}")
 print(f"Transporte: {sustTransport}")
 
-criptografia(sustWater)
+print(f'{criptografia(sustWater)}')
+print(f'{decifragem(criptografia(sustWater))}')
